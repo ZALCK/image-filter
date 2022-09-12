@@ -37,11 +37,17 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
                 .send(`URL image is required`);
     }
 
-    const path: string = await filterImageFromURL(image_url);
-    return res.status(200)
+    try {
+      const path: string = await filterImageFromURL(image_url);
+      return res.status(200)
               .sendFile(path, () => {
                 deleteLocalFiles([path]);
               });
+    } catch (error) {
+      return res.status(422)
+                .send(`We have encountered a problem with the image`);
+    }
+    
   } );
 
   //! END @TODO1
